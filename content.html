@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เริ่มการวินิจฉัย</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="top-bar">
+        <div class="top-bar-team">
+            <a>Class 4/6 No.1,2,4</a>
+        </div>
+        <div class="top-bar-head">
+            <a>ใช้ AI จำแนก</a>
+        </div>
+        <div class="top-bar-lang">
+            <a>ส่งงานนวัตกรรม</a>
+        </div>
+    </div>
+    <img class="image" src="โรคผิวหนัง.png">
+    <a href="Home.html" , style="padding: 20px;">กลับหน้าหลัก</a>
+    <div class="box2">
+        <h2>การใช้ AI วินิจฉัยโรคผิวหนังเบื้องต้น</h2>
+        <div>Teachable Machine Image Model</div>
+        <input type="file" id="imageUpload" accept="image/*">
+        <div style="display: flex; align-items: center; gap: 20px;">
+            <div id="image-container"></div>
+            <div>
+                <h3>ผลการวิเคราะห์:</h3>
+                <ul id="result"></ul>
+            </div>
+        </div>
+        
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+        
+        <script type="text/javascript">
+            const URL = "https://teachablemachine.withgoogle.com/models/JxYYGbIa-/";
+            let model, imageElement;
+        
+            // โหลดโมเดล
+            async function init() {
+                const modelURL = URL + "model.json";
+                const metadataURL = URL + "metadata.json";
+                model = await tmImage.load(modelURL, metadataURL);
+            }
+        
+            // ฟังก์ชันประมวลผลภาพ
+            async function predict() {
+                if (!imageElement) {
+                    document.getElementById("result").innerHTML = "<li>กรุณาอัปโหลดรูปภาพก่อน</li>";
+                    return;
+                }
+        
+                const prediction = await model.predict(imageElement);
+        
+                // เรียงลำดับจากเปอร์เซ็นต์ความมั่นใจสูงสุดไปต่ำสุด
+                prediction.sort((a, b) => b.probability - a.probability);
+        
+                // แสดงผลลัพธ์
+                const resultList = document.getElementById("result");
+                resultList.innerHTML = "";
+                prediction.forEach(p => {
+                    if (p.probability > 0) {
+                        const listItem = document.createElement("li");
+                        listItem.innerText = `${p.className}: ${(p.probability * 100).toFixed(2)}%`;
+                        resultList.appendChild(listItem);
+                    }
+                });
+            }
+        
+            // โหลดภาพที่อัปโหลดและแสดงผล
+            document.getElementById("imageUpload").addEventListener("change", function (event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const imageContainer = document.getElementById("image-container");
+                        imageContainer.innerHTML = "";
+                        
+                        imageElement = document.createElement("img");
+                        imageElement.src = e.target.result;
+                        imageElement.width = 200;
+                        imageElement.height = 200;
+                        imageContainer.appendChild(imageElement);
+        
+                        imageElement.onload = () => predict();
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        
+            init(); // โหลดโมเดล
+        </script>        
+    </div>
+    <div>
+        <img src="2.png" style="width: 100%; height: auto;">
+        <img src="3.png" style="width: 100%; height: auto;">
+        <img src="4.png" style="width: 100%; height: auto;">
+        <img src="5.png" style="width: 100%; height: auto;">
+        <img src="6.png" style="width: 100%; height: auto;">
+        <img src="7.png" style="width: 100%; height: auto;">
+        <img src="8.png" style="width: 100%; height: auto;">
+        <img src="9.png" style="width: 100%; height: auto;">
+        <img src="10.png" style="width: 100%; height: auto;">
+    </div>
+</body>
+</html>

@@ -1,0 +1,37 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.top-bar {
+    font-family:monospace ;
+    height: 30px;
+    background-color: rgb(146, 90, 21);
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+.image {
+    width: 100%;
+}
+.box {
+    background-color: bisque;
+    align-items: center;
+    margin: 40px;
+    padding: 50px;
+}
+.box2 {
+    margin: 20px;
+    padding: 20px;
+    background-color: bisque;
+    align-items: center;
+}
+.เหตุ {
+    font-family: monospace;
+    font-size: larger;
+}
+.หลัก {
+    font-family: monospace;
+}
